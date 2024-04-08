@@ -4,17 +4,23 @@ const express = require('express');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
 require('dotenv').config();
-
+const path = require('path'); // Import path module
+const gmailPassword = process.env.GMAIL_PASSWORD;
 
 const app = express();
-app.use(cors());
+app.use(cors(
+	{
+		"origin": "*",
+		"optionsSuccessStatus": 204
+	}
+))
 app.use(express.json());
 
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
     user: 'nitish1dalvi@gmail.com', // your Gmail username
-    pass: 'cxvb csom eutv dvht' // your Gmail password token
+    pass: process.env.GMAIL_PASSWORD // your Gmail password token
   }
 });
 
@@ -39,22 +45,10 @@ app.post('/send-email', (req, res) => {
   });
 });
 
-// Serve a simple HTML page for UI
+// Serve the index.html file
 app.get('/', (req, res) => {
-  res.send(`
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Server Status</title>
-    </head>
-    <body>
-      <h1>Server running on port 5000</h1>
-    </body>
-    </html>
-  `);
+  res.sendFile(path.join(__dirname, 'index.html')); // Sending index.html file
 });
 
-const PORT = process.env.PORT ;
+const PORT = process.env.PORT || 5000; // Default to port 5000 if PORT environment variable is not defined
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
