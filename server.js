@@ -40,7 +40,7 @@ app.post('/send-email', (req, res) => {
 });
 
 // Serve a simple HTML page for UI
-app.get('/app', (req, res) => {
+app.get('/', (req, res) => {
   res.send(`
     <!DOCTYPE html>
     <html lang="en">
